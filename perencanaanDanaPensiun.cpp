@@ -6,8 +6,8 @@
 #define ll long long
 using namespace std;
 
-// Definisi struct untuk menyimpan data pengguna
-struct Pengguna {
+// Deklarasi struct untuk menyimpan data pengguna
+struct data {
     string nama;
     ll setoranPerBulan;
     int tahunPensiun;
@@ -35,28 +35,28 @@ void tampilkanInvestasiPerTahun(ll setoranBulanan, double sukuBungaBulanan, int 
 }
 
 // Fungsi untuk membaca data dari file
-vector<Pengguna> bacaDataPengguna(const string& filePath) {
-    vector<Pengguna> data;
+vector<data> bacaDataPengguna(string& filePath) {
+    vector<data> dataPengguna;
     ifstream file(filePath);
-    Pengguna pengguna;
+    data pengguna;
     while (file >> pengguna.nama >> pengguna.setoranPerBulan >> pengguna.tahunPensiun >> pengguna.sukuBungaTahunan) {
-        data.push_back(pengguna);
+        dataPengguna.push_back(pengguna);
     }
     file.close();
-    return data;
+    return dataPengguna;
 }
 
 // Fungsi untuk menulis data ke file
-void tambahDataPengguna(const string& filePath, const Pengguna& pengguna) {
+void tambahDataPengguna(string& filePath, data& pengguna) {
     ofstream file(filePath, ios::app);
     file << pengguna.nama << " " << pengguna.setoranPerBulan << " " << pengguna.tahunPensiun << " " << pengguna.sukuBungaTahunan << endl;
     file.close();
 }
 
 // Fungsi pencarian manual dengan simulasi tahunan
-void cariPengguna(const vector<Pengguna>& data, const string& nama) {
+void cariPengguna(vector<data>& dataPengguna, string& nama) {
     bool ditemukan = false;
-    for (const auto& pengguna : data) {
+    for (const auto& pengguna : dataPengguna) {
         if (pengguna.nama == nama) {
             ditemukan = true;
             cout << "Nama: " << pengguna.nama << endl
@@ -77,12 +77,12 @@ void cariPengguna(const vector<Pengguna>& data, const string& nama) {
 }
 
 // Fungsi pengurutan manual menggunakan bubble sort
-void urutkanData(vector<Pengguna>& data) {
-    int n = data.size();
+void urutkanData(vector<data>& dataPengguna) {
+    int n = dataPengguna.size();
     for (int i = 0; i < n - 1; i++) {
         for (int j = 0; j < n - i - 1; j++) {
-            if (data[j].setoranPerBulan < data[j + 1].setoranPerBulan) {
-                swap(data[j], data[j + 1]);
+            if (dataPengguna[j].setoranPerBulan < dataPengguna[j + 1].setoranPerBulan) {
+                swap(dataPengguna[j], dataPengguna[j + 1]);
             }
         }
     }
@@ -90,7 +90,7 @@ void urutkanData(vector<Pengguna>& data) {
 
 int main() {
     string filePath = "data.csv";
-    vector<Pengguna> dataPengguna = bacaDataPengguna(filePath);
+    vector<data> dataPengguna = bacaDataPengguna(filePath);
     
     ll targetPensiun;
     double sukuBungaTahunan;
@@ -113,10 +113,12 @@ int main() {
 
         switch (opt) {
             case 0:
-                cout << "Terima kasih telah menggunakan jasa kami." << endl;
+                cout << "\nTerima kasih telah menggunakan jasa kami." << endl;
+                cout << "--------------by: Kelompok 10--------------" << endl;
                 break;
 
             case 1: {
+                //Mencari setoran bulanan pengguna dan melakukan proyeksinya
                 cout << "\nMasukkan nama Anda: ";
                 cin >> namaPengguna;
                 cout << "Masukkan target pensiun: ";
@@ -127,7 +129,7 @@ int main() {
                 cin >> tahunHinggaPensiun;
 
                 ll setoranBulanan = hitungSetoranBulanan(targetPensiun, sukuBungaTahunan, tahunHinggaPensiun, frekuensiSetoran);
-                Pengguna penggunaBaru = {namaPengguna, setoranBulanan, tahunHinggaPensiun, sukuBungaTahunan};
+                data penggunaBaru = {namaPengguna, setoranBulanan, tahunHinggaPensiun, sukuBungaTahunan};
                 tambahDataPengguna(filePath, penggunaBaru);
 
                 int jumlahSetoran = tahunHinggaPensiun * 12;
@@ -143,6 +145,7 @@ int main() {
             }
 
             case 2: {
+                //Menampilkan seluruh data pengguna
                 cout << "\nData Pengguna (diurutkan berdasarkan setoran per bulan):" << endl;
                 urutkanData(dataPengguna);
                 for (const auto& pengguna : dataPengguna) {
@@ -154,6 +157,7 @@ int main() {
             }
 
             case 3: {
+                //Mencari pengguna pada data
                 string cariNama;
                 cout << "\nMasukkan nama yang ingin dicari: ";
                 cin >> cariNama;
@@ -162,6 +166,7 @@ int main() {
             }
 
             default:
+                //Keluar dari program
                 cout << "Input tidak sesuai. Silakan coba lagi." << endl;
                 break;
         }

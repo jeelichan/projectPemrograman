@@ -1,8 +1,8 @@
 # Variables
 CXX = g++
 CXXFLAGS = -Wall
-TARGET = PerencanaanDanaPensiun
-SRC = PerencanaanDanaPensiun.cpp
+TARGET = perencanaanDanaPensiun
+SRC = perencanaanDanaPensiun.cpp
 
 # Default target: compile the program
 all: $(TARGET)
